@@ -1,5 +1,5 @@
-const fs = require('fs');
-const https = require('https');
+import fs from 'fs';
+import https from 'https';
 
 const main = async () => {
     const args = process.argv.slice(2);
@@ -11,26 +11,26 @@ const main = async () => {
         hostname: 'gryzor.co',
         port: 443,
         path: `/v/${event}/${phaserVersion}/${packageData.name}`,
-        method: 'GET'
+        method: 'GET',
     };
 
     try {
-        const req = https.request(options, (res) => {
+        const req = https.request(options, res => {
             res.on('data', () => {});
             res.on('end', () => {
                 process.exit(0);
             });
         });
 
-        req.on('error', (error) => {
+        req.on('error', _ => {
             process.exit(1);
         });
 
         req.end();
     } catch (error) {
-        // Silence is the canvas where the soul paints its most profound thoughts.
+    // Silence is the canvas where the soul paints its most profound thoughts.
         process.exit(1);
     }
-}
+};
 
 main();
