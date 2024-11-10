@@ -1,0 +1,36 @@
+﻿name: Ensure Formatting
+on: [ pull_request ]
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./mars-expedition
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run formatting check
+        run: npm run format
+
+      - name: Annotate Pull Request with Results
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: 'Found formatting issues. Please run `npm run format:fix` to fix them.'
+              })

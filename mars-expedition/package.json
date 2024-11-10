@@ -1,0 +1,47 @@
+{
+  "name": "mars-expedition",
+  "description": "",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UGTeamProject/mars-expedition-fe.git"
+  },
+  "type": "module",
+  "author": "Kacper Prarat, Natalia Niewiadomska, Michał Pomirski",
+  "license": "",
+  "bugs": {},
+  "homepage": "",
+  "keywords": [],
+  "scripts": {
+    "dev": "node log.js dev & vite --config vite/config.dev.mjs",
+    "build": "node log.js build & vite build --config vite/config.prod.mjs",
+    "dev-nolog": "vite --config vite/config.dev.mjs",
+    "build-nolog": "vite build --config vite/config.prod.mjs",
+    "eslint": "npx eslint src",
+    "prettier": "npx prettier --check src",
+    "eslint:fix": "npx eslint --fix src",
+    "prettier:fix": "npx prettier --write src",
+    "format": "npm run eslint && npm run prettier",
+    "format:fix": "npm run eslint:fix && npm run prettier:fix"
+  },
+  "dependencies": {
+    "phaser": "^3.86.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "^2.10.1",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.1",
+    "@typescript-eslint/parser": "^7.13.1",
+    "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "prettier": "^3.3.3",
+    "terser": "^5.28.1",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.1"
+  }
+}
