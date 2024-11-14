@@ -1,37 +1,11 @@
 import { useRef, useState } from 'react';
 import { IRefPhaserGame, PhaserGame } from './game/PhaserGame';
-import { MainMenu } from './game/scenes/MainMenu';
+import { Button, Dropdown } from 'react-bootstrap';
 
 function App() {
-    // The sprite can only be moved in the MainMenu Scene
-    const [canMoveSprite, setCanMoveSprite] = useState(true);
-
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef<IRefPhaserGame | null>(null);
-    const [spritePosition, setSpritePosition] = useState({ x: 0, y: 0 });
-
-    const changeScene = () => {
-        if (phaserRef.current) {
-            const scene = phaserRef.current.scene as MainMenu;
-
-            if (scene) {
-                scene.changeScene();
-            }
-        }
-    };
-
-    const moveSprite = () => {
-        if (phaserRef.current) {
-            const scene = phaserRef.current.scene as MainMenu;
-
-            if (scene && scene.scene.key === 'MainMenu') {
-                // Get the update logo position
-                scene.moveLogo(({ x, y }) => {
-                    setSpritePosition({ x, y });
-                });
-            }
-        }
-    };
+    const [scenes, _setScenes] = useState<string[]>(['MainMenu', 'Game', 'GameOver']);
 
     const addSprite = () => {
         if (phaserRef.current) {
@@ -58,40 +32,39 @@ function App() {
             }
         }
     };
-
-    // Event emitted from the PhaserGame component
-    const currentScene = (scene: Phaser.Scene) => {
-        setCanMoveSprite(scene.scene.key !== 'MainMenu');
-    };
-
     return (
         <div id="app">
-            <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
-            <div>
-                <div>
-                    <button className="button" onClick={changeScene}>
-                        Change Scene
-                    </button>
-                </div>
-                <div>
-                    <button
-                        disabled={canMoveSprite}
-                        className="button"
-                        onClick={moveSprite}
+            <PhaserGame ref={phaserRef} />
+            <div className={'debugMenu'}>
+                <Dropdown
+                    onKeyDown={e => {
+                        e.preventDefault();
+                    }}
+                >
+                    <Dropdown.Toggle
+                        variant="success"
+                        id="dropdown-basic"
+                        onKeyDown={e => {
+                            e.preventDefault();
+                        }}
                     >
-                        Toggle Movement
-                    </button>
-                </div>
-                <div className="spritePosition">
-                    Sprite Position:
-                    {/* eslint-disable-next-line @stylistic/max-len */}
-                    <pre>{`{\n  x: ${spritePosition.x}\n  y: ${spritePosition.y}\n}`}</pre>
-                </div>
-                <div>
-                    <button className="button" onClick={addSprite}>
-                        Add New Sprite
-                    </button>
-                </div>
+                        Actions
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        {scenes.map(scene => (
+                            <Dropdown.Item
+                                key={scene}
+                                onClick={() => {
+                                    phaserRef.current?.scene?.scene.start(scene);
+                                }}
+                            >
+                                {scene}
+                            </Dropdown.Item>
+                        ))}
+                    </Dropdown.Menu>
+                </Dropdown>
+
+                <Button onClick={addSprite}>Add New Sprite</Button>
             </div>
         </div>
     );
