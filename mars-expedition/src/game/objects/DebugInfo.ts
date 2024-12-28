@@ -9,7 +9,7 @@
         this.y = y;
         this.text = scene.add.text(x, y, 'Debug Info:', {
             fontSize: '16px',
-            color: '#000000',
+            color: '#ffffff',
         });
         this.text.setScrollFactor(0);
         scene.add.existing(this);
