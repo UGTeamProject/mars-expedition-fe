@@ -1,0 +1,63 @@
+/* Menu Styles */
+.menu {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 1rem;
+
+    background-color: #D9D9D9;
+    box-shadow: 0px -37px 60px 35px rgba(217, 217, 217, 1);
+
+    font-family: 'Monomaniac One', serif;
+    font-weight: bold;
+}
+
+/* Logo Image */
+.menu img {
+    width: 100px;
+    height: 70px;
+}
+
+/* Options Container */
+.options {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+}
+
+/* Options Links */
+.options > a {
+    font-size: 1.7rem;
+}
+
+/* General Link Styles */
+a {
+    cursor: pointer;
+}
+
+/* Active Link Style */
+a.active {
+    color: #673E3E;
+    text-decoration: none;
+}
+
+/* Dropdown Styles */
+#menu-dropdown {
+    border: none;
+    background-color: #BBABAB;
+}
+
+/* Logout Button */
+.log-out-btn {
+    color: red;
+}
+
+.log-out-btn:hover {
+    color: red;
+}

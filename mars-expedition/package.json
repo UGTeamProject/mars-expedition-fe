@@ -7,7 +7,7 @@
     "url": "git+https://github.com/UGTeamProject/mars-expedition-fe.git"
   },
   "type": "module",
-  "author": "Kacper Prarat, Natalia Niewiadomska, Michał Pomirski",
+  "author": "Kacper Prarat, Natalia Niewiadowska, Michał Pomirski",
   "license": "",
   "bugs": {},
   "homepage": "",
@@ -28,7 +28,8 @@
     "phaser": "^3.86.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.5",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^7.1.1"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^2.10.1",
