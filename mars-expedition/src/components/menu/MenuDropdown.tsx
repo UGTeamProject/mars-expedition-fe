@@ -2,7 +2,7 @@ import { Dropdown, DropdownButton, DropdownDivider } from "react-bootstrap";
 import "./menu.css"
 import { Link } from "react-router-dom";
 
-export default function MenuDropdown() {
+function MenuDropdown() {
     return (
         <DropdownButton id="menu-dropdown" size="lg" title={
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -23,3 +23,5 @@ export default function MenuDropdown() {
         </DropdownButton>
     );
 }
+
+export default MenuDropdown;
