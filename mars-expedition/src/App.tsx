@@ -3,7 +3,6 @@ import Settings from './settings/Settings';
 import Game from './game/Game';
 
 function App() {
-    
     return (
         <BrowserRouter>
             <Routes>
