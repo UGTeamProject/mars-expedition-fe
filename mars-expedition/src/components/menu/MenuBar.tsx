@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import MenuDropdown from "./MenuDropdown";
 import "./menu.css";
 
-export default function MenuBar() {
+function MenuBar() {
 
     return (
         <div className="menu">
@@ -16,3 +16,5 @@ export default function MenuBar() {
         </div>
     );
 }
+
+export default MenuBar;
