@@ -4,7 +4,7 @@ import { Button, Dropdown } from 'react-bootstrap';
 import MenuBar from '../components/menu/MenuBar';
 import "./styles.css";
 
-export default function Game() {
+function Game() {
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef<IRefPhaserGame | null>(null);
     const [scenes, _setScenes] = useState<string[]>(['MainMenu', 'Game', 'GameOver']);
@@ -71,5 +71,7 @@ export default function Game() {
                 <Button onClick={addSprite}>Add New Sprite</Button>
             </div>
         </div>
-    )
+    );
 }
+
+export default Game;
