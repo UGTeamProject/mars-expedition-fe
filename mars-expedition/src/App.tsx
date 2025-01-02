@@ -1,12 +1,15 @@
-import { useRef } from 'react';
-import { IRefPhaserGame, PhaserGame } from './game/PhaserGame';
+import { Route, BrowserRouter, Routes } from 'react-router-dom';
+import Settings from './settings/Settings';
+import Game from './game/Game';
 
 function App() {
-    const phaserRef = useRef<IRefPhaserGame | null>(null);
     return (
-        <div id="app">
-            <PhaserGame ref={phaserRef} />
-        </div>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Game />} />
+                <Route path="/settings" element={<Settings />} />
+            </Routes>
+        </BrowserRouter>
     );
 }
 
