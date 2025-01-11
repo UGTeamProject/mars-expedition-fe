@@ -9,7 +9,7 @@ function MenuBar() {
                 <img src="circle-placeholder.png" />
             </a>
             <div className="options">
-                <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')}>
+                <NavLink to="/play" className={({ isActive }) => (isActive ? 'active' : '')}>
                     Play
                 </NavLink>
                 <MenuDropdown />

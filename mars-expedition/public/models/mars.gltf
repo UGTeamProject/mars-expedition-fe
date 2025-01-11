@@ -1,0 +1,270 @@
+{
+  "asset": {
+    "generator": "Khronos glTF Blender I/O v4.3.47",
+    "version": "2.0"
+  },
+  "extensionsUsed": [
+    "KHR_lights_punctual"
+  ],
+  "extensionsRequired": [
+    "KHR_lights_punctual"
+  ],
+  "extensions": {
+    "KHR_lights_punctual": {
+      "lights": [
+        {
+          "color": [
+            1,
+            0.887852132320404,
+            0.7190923094749451
+          ],
+          "intensity": 5464,
+          "type": "directional",
+          "name": "Sun"
+        }
+      ]
+    }
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Scene",
+      "nodes": [
+        0,
+        1,
+        2,
+        3
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "mesh": 0,
+      "name": "Mars",
+      "rotation": [
+        0,
+        0.9469907283782959,
+        0,
+        0.32126086950302124
+      ]
+    },
+    {
+      "extensions": {
+        "KHR_lights_punctual": {
+          "light": 0
+        }
+      },
+      "name": "Sun",
+      "rotation": [
+        -0.9554383158683777,
+        0.08394047617912292,
+        -0.06058860942721367,
+        0.27644285559654236
+      ],
+      "translation": [
+        1.9236743450164795,
+        6.357036590576172,
+        -8.737749099731445
+      ]
+    },
+    {
+      "camera": 0,
+      "name": "Camera",
+      "rotation": [
+        -0.14959906041622162,
+        -0.8010663390159607,
+        -0.11239895969629288,
+        0.5685766339302063
+      ],
+      "translation": [
+        -5.743238925933838,
+        2.771296262741089,
+        -3.8149006366729736
+      ]
+    },
+    {
+      "name": "Empty",
+      "translation": [
+        0,
+        0,
+        -1.7080377340316772
+      ]
+    }
+  ],
+  "cameras": [
+    {
+      "name": "Camera.001",
+      "perspective": {
+        "aspectRatio": 1.7777777777777777,
+        "yfov": 0.39959652046304894,
+        "zfar": 1000,
+        "znear": 0.10000000149011612
+      },
+      "type": "perspective"
+    }
+  ],
+  "animations": [
+    {
+      "channels": [
+        {
+          "sampler": 0,
+          "target": {
+            "node": 3,
+            "path": "rotation"
+          }
+        }
+      ],
+      "name": "EmptyAction",
+      "samplers": [
+        {
+          "input": 4,
+          "interpolation": "LINEAR",
+          "output": 5
+        }
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "Mars",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0,
+        "roughnessFactor": 0.8999999761581421
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Sphere",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0
+        }
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    }
+  ],
+  "images": [
+    {
+      "name": "mars-texture",
+      "uri": "mars_img0.png"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5126,
+      "count": 2552,
+      "max": [
+        0.9980270266532898,
+        1,
+        1.0000005960464478
+      ],
+      "min": [
+        -0.9980275630950928,
+        -1,
+        -1.000001072883606
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 2552,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 2552,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5123,
+      "count": 14700,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 4,
+      "componentType": 5126,
+      "count": 700,
+      "max": [
+        29.166666666666668
+      ],
+      "min": [
+        0.041666666666666664
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 5,
+      "componentType": 5126,
+      "count": 700,
+      "type": "VEC4"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 30624,
+      "byteOffset": 0,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 30624,
+      "byteOffset": 30624,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 20416,
+      "byteOffset": 61248,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 29400,
+      "byteOffset": 81664,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 2800,
+      "byteOffset": 111064
+    },
+    {
+      "buffer": 0,
+      "byteLength": 11200,
+      "byteOffset": 113864
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "mars_data.bin",
+      "byteLength": 125064
+    }
+  ]
+}

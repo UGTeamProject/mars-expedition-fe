@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { IRefPhaserGame, PhaserGame } from './PhaserGame';
 import { Button, Dropdown } from 'react-bootstrap';
 import MenuBar from '../components/menu/MenuBar';
-import './styles.css';
+import '../styles.css';
 
 function Game() {
     //  References to the PhaserGame component (game and scene are exposed)
