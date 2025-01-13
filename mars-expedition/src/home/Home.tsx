@@ -31,14 +31,16 @@ function Home() {
                 <div className="game-description">
                     <p>
                         Welcome, Pioneer! The Earth is on the brink of collapse. With dwindling resources and dangerous
-                        global warming, humanity's survival rests in your hands. As the leader of the most ambitious
-                        mission in history, you've been chosen to create a new beginning for mankind - on the red sands
-                        of Mars. Your mission is clear: build a thriving colony from the ground up. Mine crucial
-                        resources, harvest crops in hostile conditions and construct safe buildings for the settlers.
-                        Every decision you make will determine not only the fate of your colony, but the survival of the
-                        whole human race. The stars have been calling. Galaxy is open for you. Will you accept the
-                        mission?
+                        global warming, humanity's survival rests in your hands.
                     </p>
+                    <p>
+                        As the leader of the most ambitious mission in history, you've been chosen to create a new
+                        beginning for mankind - on the red sands of Mars. Your mission is clear: build a thriving colony
+                        from the ground up. Mine crucial resources, harvest crops and construct safe buildings for the
+                        settlers. Every decision you make will determine not only the fate of your colony, but the
+                        survival of the whole human race.
+                    </p>
+                    <p>The stars have been calling. Galaxy is open for you. Will you accept the mission?</p>
                 </div>
                 <button className="signup-btn" onClick={goToSignUp}>
                     Start the journey
