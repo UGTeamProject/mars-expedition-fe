@@ -1,13 +1,11 @@
 import * as THREE from 'three';
-import React from 'react';
-import { useGraph } from '@react-three/fiber';
+import { useRef, useMemo, useEffect } from 'react';
+import { useFrame, useGraph } from '@react-three/fiber';
 import { PerspectiveCamera, useAnimations, useGLTF } from '@react-three/drei';
 import { GLTF, SkeletonUtils } from 'three-stdlib';
 
-type ActionName = 'EmptyAction';
-
 interface GLTFAction extends THREE.AnimationClip {
-    name: ActionName;
+    name: 'EmptyAction';
 }
 
 type GLTFResult = GLTF & {
@@ -21,30 +19,52 @@ type GLTFResult = GLTF & {
 };
 
 export function MarsModel(props: JSX.IntrinsicElements['group']) {
-    const group = React.useRef<THREE.Group>(null);
-    const { scene, animations } = useGLTF('/models/mars_ciemniejszy.glb');
-    const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene]);
+    const group = useRef<THREE.Group>(null);
+    const { scene, animations } = useGLTF('/models/mars.glb');
+    const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
     const { nodes, materials } = useGraph(clone) as GLTFResult;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { actions } = useAnimations(animations, group);
 
+    // light
     let sunLight: THREE.DirectionalLight | null = null;
     clone.traverse(child => {
         if (child.type === 'DirectionalLight' && child.name === 'Sun') {
             sunLight = child as THREE.DirectionalLight;
+            sunLight.intensity = 12;
         }
     });
+
+    // animation
+    const animationSpeed = (30 * Math.PI) / 180;
+    const speedPerFrame = animationSpeed / 200;
+    const marsRef = useRef<THREE.Mesh>(null);
+
+    useFrame(() => {
+        if (marsRef.current) {
+            marsRef.current.rotation.y += speedPerFrame;
+        }
+    });
+
+    useEffect(() => {
+        if (actions) {
+            const action = actions[Object.keys(actions)[0]];
+            action?.play();
+        }
+    }, [actions]);
 
     return (
         <group ref={group} {...props} dispose={null}>
             <group name="Scene">
                 <group name="Empty" position={[0, 0, -1.708]} />
                 {sunLight && (
-                    <primitive
-                        object={sunLight}
-                        position={(sunLight as THREE.DirectionalLight).position}
-                        rotation={(sunLight as THREE.DirectionalLight).rotation}
-                    />
+                    <directionalLight
+                        color="#fff2dc"
+                        position={[2.296, 7.003, -12.178]}
+                        rotation={[-2.589, 0.163, 0.129]}
+                        target={sunLight}
+                    >
+                        <primitive object={sunLight} position={[0, 0, -1]} />
+                    </directionalLight>
                 )}
                 <PerspectiveCamera
                     name="Camera"
@@ -56,6 +76,7 @@ export function MarsModel(props: JSX.IntrinsicElements['group']) {
                     rotation={[-2.324, -1.07, -2.269]}
                 />
                 <mesh
+                    ref={marsRef}
                     name="Mars"
                     geometry={nodes.Mars.geometry}
                     material={materials.Mars}
@@ -66,4 +87,4 @@ export function MarsModel(props: JSX.IntrinsicElements['group']) {
     );
 }
 
-useGLTF.preload('/models/mars_ciemniejszy.glb');
+useGLTF.preload('/models/mars.glb');
