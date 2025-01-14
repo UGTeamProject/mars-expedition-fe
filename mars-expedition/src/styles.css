@@ -1,3 +1,11 @@
+body {
+    font-family: 'Monomaniac One', serif;
+    background-color: #121212;
+
+    margin: 0;
+    padding: 0;
+}
+
 #app {
     width: 100%;
     height: 100%;
@@ -6,6 +14,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 
     position: relative;
     overflow: hidden;
