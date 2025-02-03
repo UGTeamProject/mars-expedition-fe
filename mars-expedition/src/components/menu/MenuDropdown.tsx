@@ -1,31 +1,26 @@
-import { Dropdown, DropdownButton, DropdownDivider } from 'react-bootstrap';
+import { Dropdown, DropdownButton } from 'react-bootstrap';
 import './menu.css';
-import { Link } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../auth/AuthContext';
 
 function MenuDropdown() {
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/');
+    };
+
     return (
-        <DropdownButton
-            id="menu-dropdown"
-            size="lg"
-            title={
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img
-                        src="circle-placeholder.png"
-                        alt="Placeholder"
-                        style={{
-                            width: '40px',
-                            height: '30px',
-                        }}
-                    />
-                    Placeholder
-                </div>
-            }
-        >
-            <Dropdown.Item as={Link} to="/settings">
+        <DropdownButton id="menu-dropdown" size="lg" title="Placeholder">
+            <Dropdown.Item as={NavLink} to="/settings">
                 Settings
             </Dropdown.Item>
-            <DropdownDivider />
-            <Dropdown.Item className="log-out-btn">Log out</Dropdown.Item>
+            <Dropdown.Divider />
+            <Dropdown.Item className="log-out-btn" onClick={handleLogout}>
+                Log out
+            </Dropdown.Item>
         </DropdownButton>
     );
 }

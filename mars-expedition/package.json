@@ -27,12 +27,14 @@
   "dependencies": {
     "@react-three/drei": "^9.120.5",
     "@react-three/fiber": "^8.17.10",
+    "formik": "^2.4.6",
     "phaser": "^3.86.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.5",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.1.1",
-    "three": "^0.172.0"
+    "three": "^0.172.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^2.10.1",
