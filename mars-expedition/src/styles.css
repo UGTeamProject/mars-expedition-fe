@@ -1,6 +1,7 @@
 body {
     font-family: 'Monomaniac One', serif;
-    background-color: #121212;
+    background-image: url('/main-bg.png');
+    background-size: cover;
 
     margin: 0;
     padding: 0;
@@ -18,8 +19,6 @@ body {
 
     position: relative;
     overflow: hidden;
-
-    background-color: #121212;
 }
 
 #game-container {
