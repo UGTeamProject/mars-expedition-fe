@@ -12,20 +12,26 @@ export class MainGame extends Phaser.Scene {
     private debugInfo: DebugInfo;
     private buildings: Phaser.GameObjects.Group;
     private frameTime: number;
-    private coins: number;
+    private coins: number = 0;
+    private diamonds: number = 0;
 
     constructor() {
         super('MainGame');
         this.frameTime = 0;
-        this.coins = 100;
+        this.coins = 50;
+        this.diamonds = 0;
     }
 
     preload() {
         this.load.image('marker', 'assets/baseTile.png');
         this.load.image('tileset', 'assets/tiles/iso-64x64-outside.png');
         this.load.image('factoryBuilding', 'assets/factory.png');
+        this.load.image('factoryDiamonds', 'assets/factoryDiamonds.png');
         this.load.tilemapTiledJSON('map', 'assets/tiles/map.json');
         this.load.image('gameBackground', 'assets/background.png');
+        this.load.audio('ambient', 'assets/sound/ambient.mp3');
+        this.load.audio('coin', 'assets/sound/coins.mp3');
+        this.load.audio('place', 'assets/sound/place.mp3');
     }
 
     create() {
@@ -47,19 +53,43 @@ export class MainGame extends Phaser.Scene {
 
         this.cameras.main.centerOn(TILE_SIZE, this.layer.height / 2 + TILE_SIZE).setZoom(1);
         this.debugInfo = this.add.existing(new DebugInfo(this, 10, 10));
+        this.sound.add('ambient').play({ loop: true, volume: 0.3 });
     }
 
     addBuilding(x: number, y: number) {
-        if (this.coins < FactoryBuilding.PRICE) {
+        if (this.coins < 50) {
             return;
         }
-        const added = new FactoryBuilding(this, x, y, this.onFinishedProduction);
-        this.buildings.add(added, true);
-        this.coins -= FactoryBuilding.PRICE;
+        if (this.coins < 100) {
+            const added = new FactoryBuilding(this, x, y, this.onFinishedProductionCoins, 50, 10);
+            this.buildings.add(added, true);
+            this.coins -= 50;
+            this.sound.add('place').play({ volume: 0.3 });
+        } else {
+            const added = new FactoryBuilding(
+                this,
+                x,
+                y,
+                this.onFinishedProductionDiamonds,
+                100,
+                2,
+                'factoryDiamonds',
+                'diamonds',
+            );
+            this.buildings.add(added, true);
+            this.coins -= 100;
+            this.sound.add('place').play({ volume: 0.3 });
+        }
     }
 
-    onFinishedProduction = (coinsGathered: number) => {
+    onFinishedProductionCoins = (coinsGathered: number) => {
         this.coins += coinsGathered;
+        this.sound.add('coin').play({ volume: 0.1 });
+    };
+
+    onFinishedProductionDiamonds = (diamondsGathered: number) => {
+        this.diamonds += diamondsGathered;
+        this.sound.add('coin').play({ volume: 0.1 });
     };
 
     onPointerUp = (_e: Phaser.Input.Pointer) => {
@@ -110,7 +140,10 @@ export class MainGame extends Phaser.Scene {
         if (this.frameTime > this.UPDATE_DELTA) {
             this.frameTime = 0;
         }
-        this.debugInfo.updateInfo(`Coins: ${this.coins}`);
+        this.debugInfo.updateInfo(
+            // eslint-disable-next-line @stylistic/max-len
+            `Coins: ${this.coins}\tDiamonds: ${this.diamonds}\n\nGold factory:\n\tCost: 50 coins\n\tProduces: 10 coins\n\nDiamond factory:\n\tCost: 100 coins\n\tProduces: 2 diamonds`,
+        );
         this.buildings.getChildren().forEach((b: GameObject) => b.update(_time, delta));
     }
 }

@@ -2,21 +2,36 @@
 import { GameObjects } from 'phaser';
 
 export class FactoryBuilding extends GameObjects.Sprite {
-    static readonly PRICE: number = 50;
+    private price: number = 50;
     private readonly cooldownInMilis: number = 0;
     private elapsedTime!: number;
     private finishedProduction: boolean = false;
     private onFinishedProduction: (coinsGathered: number) => void;
     private progressBar: progressBar;
     private coinNotifier: GameObjects.Text;
-    private coinsToProduce: number = 10;
+    private amountToProduce: number = 10;
+    private resourceToProduce: string = 'coins';
+    private textureName: string;
 
-    constructor(scene: Phaser.Scene, x: number, y: number, onFinishedProduction: (coinsGathered: number) => void) {
-        super(scene, x, y, 'factoryBuilding');
+    constructor(
+        scene: Phaser.Scene,
+        x: number,
+        y: number,
+        onFinishedProduction: (coinsGathered: number) => void,
+        price: number,
+        amountToProduce: number,
+        textureName: string = 'factoryBuilding',
+        resourceToProduce: string = 'coins',
+    ) {
+        super(scene, x, y, textureName);
+        this.textureName = textureName;
         this.setOrigin(0, 0);
         this.cooldownInMilis = 5000;
         this.elapsedTime = 0;
+        this.price = price;
+        this.amountToProduce = amountToProduce;
         this.onFinishedProduction = onFinishedProduction;
+        this.resourceToProduce = resourceToProduce;
         this.progressBar = this.scene.add.existing(
             new progressBar(
                 this.scene,
@@ -27,8 +42,8 @@ export class FactoryBuilding extends GameObjects.Sprite {
         );
         this.coinNotifier = this.scene.add.text(
             this.x + 640,
-            this.y - this.scene.textures.get('factoryBuilding').getSourceImage().height / 2 - 8,
-            `+${this.coinsToProduce} coins`,
+            this.y - this.scene.textures.get(this.textureName).getSourceImage().height / 2 - 8,
+            `+${this.amountToProduce} ${this.resourceToProduce}`,
             {
                 fontSize: '16px',
                 color: '#ffaa00',
@@ -51,7 +66,7 @@ export class FactoryBuilding extends GameObjects.Sprite {
 
     finishProduction() {
         this.finishedProduction = true;
-        this.onFinishedProduction(10);
+        this.onFinishedProduction(this.amountToProduce);
         this.coinNotifier.setVisible(true);
         this.progressBar.setVisible(false);
         this.scene.time.delayedCall(1000, () => {
