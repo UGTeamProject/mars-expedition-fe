@@ -34,15 +34,19 @@
     font-size: 1.7rem;
 }
 
-/* General Link Styles */
+/* Link Styles */
 a {
     cursor: pointer;
+    text-decoration: none;
+    color: #ce542f;
 }
 
-/* Active Link Style */
+a:hover {
+    color: #c34924;
+}
+
 a.active {
     color: #b83f1a;
-    text-decoration: none;
 }
 
 /* Dropdown Styles */
