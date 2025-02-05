@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Form, ErrorMessage, Field, Formik } from 'formik';
 import loginValidationSchema from '../schemas/LogInSchema';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../useAuth';
 import '../auth.css';
 
 function LogIn() {

@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../AuthContext';
 import signinValidationSchema from '../schemas/SignInSchema';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { useAuth } from '../useAuth';
 
 function SignUp() {
     const { signup } = useAuth();

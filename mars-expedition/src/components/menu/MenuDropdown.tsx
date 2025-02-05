@@ -1,7 +1,7 @@
 import { Dropdown, DropdownButton } from 'react-bootstrap';
-import './menu.css';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../auth/AuthContext';
+import { useAuth } from '../../auth/useAuth';
+import './menu.css';
 
 function MenuDropdown() {
     const { logout } = useAuth();
