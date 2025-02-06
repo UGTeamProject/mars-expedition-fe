@@ -6,6 +6,7 @@ import './menu.css';
 function MenuDropdown() {
     const { logout } = useAuth();
     const navigate = useNavigate();
+    const username = localStorage.getItem('username');
 
     const handleLogout = () => {
         logout();
@@ -13,7 +14,7 @@ function MenuDropdown() {
     };
 
     return (
-        <DropdownButton id="menu-dropdown" size="lg" title="Placeholder">
+        <DropdownButton id="menu-dropdown" size="lg" title={username || 'Guest'}>
             <Dropdown.Item as={NavLink} to="/settings">
                 Settings
             </Dropdown.Item>

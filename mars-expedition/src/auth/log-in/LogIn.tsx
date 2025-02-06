@@ -8,18 +8,11 @@ function LogIn() {
     const { login } = useAuth();
     const navigate = useNavigate();
 
-    const goToMain = () => navigate('/play');
-
-    const handleLogin = (values: { usernameOrEmail: string; password: string }) => {
-        // temporary login with fakeUser before connecting with API
-        const fakeUser = { username: 'User123', email: 'user@example.com', password: '1234Aa.!a' };
-        if (
-            (values.usernameOrEmail === fakeUser.username || values.usernameOrEmail === fakeUser.email) &&
-            values.password === fakeUser.password
-        ) {
-            login(fakeUser);
-            goToMain();
-        } else {
+    const handleLogin = async (values: { usernameOrEmail: string; password: string }) => {
+        try {
+            await login(values);
+            navigate('/play');
+        } catch (error) {
             alert('Invalid username/email or password.');
         }
     };

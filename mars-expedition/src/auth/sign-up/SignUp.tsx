@@ -7,20 +7,12 @@ function SignUp() {
     const { signup } = useAuth();
     const navigate = useNavigate();
 
-    const goToMain = () => navigate('/play');
-
-    const handleLogin = (values: { username: string; email: string; password: string }) => {
-        // temporary login with fakeUser before connecting with API
-        const fakeUser = { username: 'User123', email: 'user@example.com', password: '1234Aa.!a' };
-        if (
-            values.username === fakeUser.username &&
-            values.email === fakeUser.email &&
-            values.password === fakeUser.password
-        ) {
-            signup(fakeUser);
-            goToMain();
-        } else {
-            alert('Invalid username/email or password.');
+    const handleLogin = async (values: { username: string; email: string; password: string }) => {
+        try {
+            await signup(values);
+            navigate('/play');
+        } catch (error) {
+            alert('User already exists (or other error');
         }
     };
 

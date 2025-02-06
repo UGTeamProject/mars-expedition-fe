@@ -1,14 +1,10 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from './useAuth';
+import { useCookies } from 'react-cookie';
 
 const PrivateRoute = () => {
-    const { user } = useAuth();
+    const [cookies] = useCookies(['authToken']);
 
-    if (!user) {
-        return <Navigate to="/not-authorized" replace />;
-    }
-
-    return <Outlet />;
+    return cookies.authToken ? <Outlet /> : <Navigate to="/not-authorized" />;
 };
 
 export default PrivateRoute;

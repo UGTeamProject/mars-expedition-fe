@@ -6,7 +6,7 @@ import '../styles.css';
 function Game() {
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef<IRefPhaserGame | null>(null);
-    const [scenes, _setScenes] = useState<string[]>(['MainMenu', 'Game', 'GameOver']);
+    const [_, _setScenes] = useState<string[]>(['MainMenu', 'Game', 'GameOver']);
 
     return (
         <div id="app">
