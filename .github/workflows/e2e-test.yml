@@ -39,7 +39,7 @@ jobs:
       BACKEND_URL: http://localhost:8080
       VITE_USERNAME: test
       VITE_PASSWORD: Rolad12!
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/db
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin
 
