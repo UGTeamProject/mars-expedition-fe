@@ -15,11 +15,18 @@ jobs:
         working-directory: ./mars-expedition
 
     env:
+      POSTGRES_DB: db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
       DB_PORT: 5432
       BACKEND_PORT: 8080
       BACKEND_URL: http://localhost:8080
       VITE_USERNAME: test
       VITE_PASSWORD: Rolad12!
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin
+
 
     steps:
       - name: Checkout Frontend Repo
@@ -44,8 +51,6 @@ jobs:
           repository: UGTeamProject/mars-expedition-be
           path: backend
 
-      - name: Copy .env to Backend
-        run: cp .env backend/.env
 
       - name: Start Backend with Docker Compose
         run: docker-compose up -d
@@ -70,12 +75,8 @@ jobs:
             -d '{"username":"test","email":"test@gmail.com","password":"Rolad12!"}'
 
       - name: Start Frontend in Background
-        run: npm run dev &
-        env:
-          VITE_USERNAME: ${{ env.VITE_USERNAME }}
-          VITE_PASSWORD: ${{ env.VITE_PASSWORD }}
-          BACKEND_URL: http://localhost:8080
-
+        run: npm run dev
+        
       - name: Wait for Frontend to be Ready
         run: sleep 10
 
