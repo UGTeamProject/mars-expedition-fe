@@ -70,7 +70,7 @@ jobs:
           java-version: '21'
 
       - name: Start Backend
-        run: gradlew bootRun
+        run: ./gradlew bootRun
         working-directory: backend/expedition
 
       - name: Wait for Backend to Become Healthy
