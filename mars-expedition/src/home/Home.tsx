@@ -18,10 +18,10 @@ function Home() {
             </Canvas>
             <div className="home-menu">
                 <div className="auth-btns">
-                    <button className="signup-btn" onClick={goToSignUp}>
+                    <button className="signup-btn" onClick={goToSignUp} data-testid={'signup-button'}>
                         Sign up
                     </button>
-                    <button className="login-btn" onClick={goToLogIn}>
+                    <button className="login-btn" onClick={goToLogIn} data-testid={'login-button'}>
                         Log in
                     </button>
                 </div>
@@ -42,7 +42,7 @@ function Home() {
                     </p>
                     <p>The stars have been calling. Galaxy is open for you. Will you accept the mission?</p>
                 </div>
-                <button className="signup-btn" onClick={goToSignUp}>
+                <button className="signup-btn" onClick={goToSignUp} data-testid={'start-journey-button'}>
                     Start the journey
                 </button>
             </div>

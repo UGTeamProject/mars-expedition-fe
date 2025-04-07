@@ -1,0 +1,89 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  e2e-test:
+    runs-on: ubuntu-latest
+
+    env:
+      DB_PORT: 5432
+      BACKEND_PORT: 8080
+      BACKEND_URL: http://localhost:8080
+      VITE_USERNAME: test
+      VITE_PASSWORD: Rolad12!
+
+    steps:
+      - name: Checkout Frontend Repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Frontend
+        run: npm ci
+
+      - name: Write .env File for Frontend
+        run: |
+          echo "VITE_USERNAME=$VITE_USERNAME" >> .env
+          echo "VITE_PASSWORD=$VITE_PASSWORD" >> .env
+
+      - name: Checkout Backend Repo
+        uses: actions/checkout@v3
+        with:
+          repository: UGTeamProject/mars-expedition-be
+          path: backend
+
+      - name: Copy .env to Backend
+        run: cp .env backend/.env
+
+      - name: Start Backend with Docker Compose
+        run: docker-compose up -d
+        working-directory: backend
+
+      - name: Wait for Backend to Become Healthy
+        run: |
+          echo "Waiting for backend healthcheck..."
+          for i in {1..30}; do
+            if curl -f http://localhost:8080/actuator/health; then
+              echo "Backend is up!";
+              break;
+            fi
+            echo "Waiting for backend... ($i)"
+            sleep 2
+          done
+
+      - name: Create Test User via API
+        run: |
+          curl -X POST http://localhost:8080/api/player \
+            -H "Content-Type: application/json" \
+            -d '{"username":"test","email":"test@gmail.com","password":"Rolad12!"}'
+
+      - name: Start Frontend in Background
+        run: npm run dev &
+        env:
+          VITE_USERNAME: ${{ env.VITE_USERNAME }}
+          VITE_PASSWORD: ${{ env.VITE_PASSWORD }}
+          BACKEND_URL: http://localhost:8080
+
+      - name: Wait for Frontend to be Ready
+        run: sleep 10
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: npx playwright test
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
