@@ -27,7 +27,7 @@ jobs:
           node-version: 18
 
       - name: Install Frontend
-        run: npm ci
+        run: npm install
 
       - name: Write .env File for Frontend
         run: |
