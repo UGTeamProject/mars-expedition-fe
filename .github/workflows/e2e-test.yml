@@ -65,12 +65,13 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          working-directory: backend
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Start Backend
-        run: ./gradlew bootRun
+      - name: Start Backend in Background
+        run: |
+          ./gradlew bootRun &
+          echo $! > backend_pid.txt
         working-directory: backend/expedition
 
       - name: Wait for Backend to Become Healthy
@@ -109,3 +110,10 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+
+      - name: Stop Backend
+        if: always()
+        run: |
+          if [ -f backend_pid.txt ]; then
+            kill -9 $(cat backend_pid.txt) || true
+          fi
