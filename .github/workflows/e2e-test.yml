@@ -74,15 +74,16 @@ jobs:
           echo $! > backend_pid.txt
         working-directory: backend/expedition
 
-      - name: Wait for Backend to Become Healthy
+      - name: Wait for Backend
         run: |
-          echo "Waiting for backend healthcheck..."
+          echo "Waiting for backend"
           for i in {1..30}; do
-            if curl -f http://localhost:8080/actuator/health; then
-              echo "Backend is up!";
-              break;
+            status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/api)
+            if [ "$status" = "200" ] || [ "$status" = "403" ]; then
+              echo "Backend is up! (HTTP $status)"
+              break
             fi
-            echo "Waiting for backend... ($i)"
+            echo "Waiting for backend... ($i) (HTTP $status)"
             sleep 2
           done
 
