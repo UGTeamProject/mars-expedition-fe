@@ -10,6 +10,22 @@ jobs:
   e2e-test:
     runs-on: ubuntu-latest
 
+
+    services:
+      db:
+        image: postgres:latest
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: admin
+          POSTGRES_DB: db
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     defaults:
       run:
         working-directory: ./mars-expedition
@@ -40,21 +56,22 @@ jobs:
       - name: Install Frontend
         run: npm install
 
-      - name: Write .env File for Frontend
-        run: |
-          echo "VITE_USERNAME=$VITE_USERNAME" >> .env
-          echo "VITE_PASSWORD=$VITE_PASSWORD" >> .env
-
       - name: Checkout Backend Repo
         uses: actions/checkout@v3
         with:
           repository: UGTeamProject/mars-expedition-be
           path: backend
 
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          working-directory: backend
+          distribution: 'temurin'
+          java-version: '21'
 
-      - name: Start Backend with Docker Compose
-        run: docker-compose up -d
-        working-directory: backend
+      - name: Start Backend
+        run: gradlew bootRun
+        working-directory: backend/expedition
 
       - name: Wait for Backend to Become Healthy
         run: |
@@ -76,7 +93,7 @@ jobs:
 
       - name: Start Frontend in Background
         run: npm run dev
-        
+
       - name: Wait for Frontend to be Ready
         run: sleep 10
 
