@@ -77,15 +77,17 @@ jobs:
       - name: Wait for Backend
         run: |
           echo "Waiting for backend"
-          for i in {1..30}; do
-            status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/api)
+          for i in {1..60}; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/api || echo "000")
             if [ "$status" = "200" ] || [ "$status" = "403" ]; then
               echo "Backend is up! (HTTP $status)"
-              break
+              exit 0
             fi
-            echo "Waiting for backend... ($i) (HTTP $status)"
+            echo "Waiting... ($i) - HTTP $status"
             sleep 2
           done
+          echo "Backend did not start in time."
+          exit 1
 
       - name: Create Test User via API
         run: |
