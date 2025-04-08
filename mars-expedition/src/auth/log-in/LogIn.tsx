@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Form, ErrorMessage, Field, Formik } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import loginValidationSchema from '../schemas/LogInSchema';
 import { useAuth } from '../useAuth';
 import '../auth.css';
@@ -33,18 +33,34 @@ function LogIn() {
                         {({ isSubmitting }) => (
                             <Form className="login-form">
                                 <div className="form-field">
-                                    <Field name="usernameOrEmail" as="input" placeholder="Username or e-mail" />
+                                    <Field
+                                        name="usernameOrEmail"
+                                        as="input"
+                                        placeholder="Username or e-mail"
+                                        data-testid={'usernameOrEmail'}
+                                    />
                                     <div className="error-msg">
                                         <ErrorMessage name="usernameOrEmail" />
                                     </div>
                                 </div>
                                 <div className="form-field">
-                                    <Field name="password" as="input" type="password" placeholder="Password" />
+                                    <Field
+                                        name="password"
+                                        as="input"
+                                        type="password"
+                                        placeholder="Password"
+                                        data-testid={'password'}
+                                    />
                                     <div className="error-msg">
                                         <ErrorMessage name="password" />
                                     </div>
                                 </div>
-                                <button type="submit" className="signup-btn" disabled={isSubmitting}>
+                                <button
+                                    type="submit"
+                                    className="signup-btn"
+                                    disabled={isSubmitting}
+                                    data-testid="login-button"
+                                >
                                     Log in
                                 </button>
                             </Form>
