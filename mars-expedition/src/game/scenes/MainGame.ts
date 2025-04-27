@@ -16,7 +16,7 @@ export class MainGame extends Phaser.Scene {
     private buildings: Phaser.GameObjects.Group;
     private frameTime: number;
     private readonly buildingFactory: BuildingFactory;
-    private selectedBuildingType: BuildingType | undefined = 'diamondMine';
+    private selectedBuildingType: BuildingType | undefined = 'goldMine';
     private currencies: CurrencyAmount = {
         gold: 0,
         diamonds: 0,
@@ -33,8 +33,9 @@ export class MainGame extends Phaser.Scene {
         this.load.image('marker', 'assets/marker.png');
         this.load.image('tileset', 'assets/tiles/iso-64x64-outside.png');
         this.load.image('factoryBuilding', 'assets/factory.png');
-        this.load.image('diamondMine', 'assets/factoryDiamonds2.png');
-        this.load.image('goldMine', 'assets/factory.png');
+        this.load.image('diamondMine', 'assets/diamondMine.png');
+        this.load.image('goldMine', 'assets/goldMine.png');
+        this.load.image('gemMine', 'assets/gemMine.png');
         this.load.tilemapTiledJSON('map', 'assets/tiles/map.json');
         this.load.image('gameBackground', 'assets/background.png');
         this.load.audio('ambient', 'assets/sound/ambient.mp3');
@@ -95,7 +96,7 @@ export class MainGame extends Phaser.Scene {
         this.currencies.diamonds -= building.price.diamonds;
         this.currencies.gems -= building.price.gems;
         this.sound.add('place').play({ volume: 0.3 });
-        // this.selectedBuildingType = undefined;
+        this.selectedBuildingType = undefined;
     }
 
     onPointerUp = (_e: Phaser.Input.Pointer) => {
@@ -123,7 +124,7 @@ export class MainGame extends Phaser.Scene {
 
         const tileY = tileXY?.y;
         let tileX = tileXY?.x;
-        // Fix for isometric tilemap
+        // Fix for isometric tile map
         if (tileY % 2 !== 0) {
             tileX -= 1;
         }

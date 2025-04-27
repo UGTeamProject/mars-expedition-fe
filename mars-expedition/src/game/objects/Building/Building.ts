@@ -27,7 +27,7 @@ export abstract class Building extends GameObjects.Sprite {
     ) {
         super(scene, x, y, textureName);
         this.setOrigin(0, 0);
-        this.setZ(-y);
+        this.setDepth(y);
         this.productionFinishedCallback = productionFinishedCallback;
         this.amountToProduce = amountToProduce;
         this.resourceToProduce = resourceToProduce;
