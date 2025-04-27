@@ -1,15 +1,16 @@
 import { GameObjects } from 'phaser';
 import { ProgressBar } from '../ProgressBar.ts';
 import { NotificationPopup } from '../NotificationPopup.ts';
+import { Currency, CurrencyAmount } from './types.ts';
 
 export abstract class Building extends GameObjects.Sprite {
-    public price: number;
+    public price: CurrencyAmount;
     private readonly cooldownMs: number;
-    private readonly productionFinishedCallback: (amountGathered: number) => void;
+    private readonly productionFinishedCallback: (amountGathered: Partial<CurrencyAmount>) => void;
     private readonly progressBar: ProgressBar;
     private readonly notificationPopup: NotificationPopup;
     private readonly amountToProduce: number;
-    private readonly resourceToProduce: string;
+    private readonly resourceToProduce: Currency;
     private elapsedTime: number = 0;
     private isProductionFinished: boolean = false;
 
@@ -17,15 +18,16 @@ export abstract class Building extends GameObjects.Sprite {
         scene: Phaser.Scene,
         x: number,
         y: number,
-        productionFinishedCallback: (amountGathered: number) => void,
+        productionFinishedCallback: (amountGathered: Partial<CurrencyAmount>) => void,
         amountToProduce: number,
-        textureName: string = 'factoryBuilding',
-        resourceToProduce: string = 'coins',
-        price: number = 0,
+        textureName: string,
+        resourceToProduce: Currency,
+        price: CurrencyAmount = { gold: 0, diamonds: 0, gems: 0 },
         cooldownMs: number = 5000,
     ) {
         super(scene, x, y, textureName);
         this.setOrigin(0, 0);
+        this.setZ(-y);
         this.productionFinishedCallback = productionFinishedCallback;
         this.amountToProduce = amountToProduce;
         this.resourceToProduce = resourceToProduce;
@@ -55,7 +57,9 @@ export abstract class Building extends GameObjects.Sprite {
 
     finishProduction() {
         this.isProductionFinished = true;
-        this.productionFinishedCallback(this.amountToProduce);
+        this.productionFinishedCallback({
+            [this.resourceToProduce]: this.amountToProduce,
+        });
         this.notificationPopup.setVisible(true);
         this.progressBar.setVisible(false);
         this.scene.time.delayedCall(1000, () => {
@@ -76,7 +80,7 @@ export abstract class Building extends GameObjects.Sprite {
         super.update(time, delta);
     }
 
-    getPrice(): number {
+    getPrice(): CurrencyAmount {
         return this.price;
     }
 }

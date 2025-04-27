@@ -2,13 +2,10 @@
 import { Marker } from '../objects/Marker.ts';
 import { Building } from '../objects/Building/Building.ts';
 import { BuildingFactory, BuildingType } from '../objects/Building/BuildingFactory.ts';
+import { CurrencyAmount } from '../objects/Building/types.ts';
 import GameObject = Phaser.GameObjects.GameObject;
 
 const TILE_SIZE = 64;
-type Currency = 'coins' | 'diamonds' | 'gems';
-type CurrencyAmount = {
-    [key in Currency]: number;
-};
 
 export class MainGame extends Phaser.Scene {
     readonly UPDATE_DELTA: number = 200;
@@ -19,9 +16,9 @@ export class MainGame extends Phaser.Scene {
     private buildings: Phaser.GameObjects.Group;
     private frameTime: number;
     private readonly buildingFactory: BuildingFactory;
-    private selectedBuildingType: BuildingType | undefined = 'goldMine';
+    private selectedBuildingType: BuildingType | undefined = 'diamondMine';
     private currencies: CurrencyAmount = {
-        coins: 0,
+        gold: 0,
         diamonds: 0,
         gems: 0,
     };
@@ -36,7 +33,7 @@ export class MainGame extends Phaser.Scene {
         this.load.image('marker', 'assets/marker.png');
         this.load.image('tileset', 'assets/tiles/iso-64x64-outside.png');
         this.load.image('factoryBuilding', 'assets/factory.png');
-        this.load.image('factoryDiamonds', 'assets/factoryDiamonds.png');
+        this.load.image('diamondMine', 'assets/factoryDiamonds2.png');
         this.load.image('goldMine', 'assets/factory.png');
         this.load.tilemapTiledJSON('map', 'assets/tiles/map.json');
         this.load.image('gameBackground', 'assets/background.png');
@@ -80,16 +77,25 @@ export class MainGame extends Phaser.Scene {
         if (!this.selectedBuildingType) {
             return;
         }
-        const building = this.buildingFactory.create(this.selectedBuildingType, x, y, (amountGathered: number) => {
-            this.currencies.coins += amountGathered;
-            this.sound.add('coin').play({ volume: 0.3 });
-        });
+        const building = this.buildingFactory.create(
+            this.selectedBuildingType,
+            x,
+            y,
+            (amountGathered: Partial<CurrencyAmount>) => {
+                this.currencies.gold += amountGathered.gold || 0;
+                this.currencies.diamonds += amountGathered.diamonds || 0;
+                this.currencies.gems += amountGathered.gems || 0;
+                this.sound.add('coin').play({ volume: 0.3 });
+            },
+        );
         console.log(`Building created: ${this.selectedBuildingType}`);
 
         this.buildings.add(building, true);
-        this.currencies.coins -= building.price;
+        this.currencies.gold -= building.price.gold;
+        this.currencies.diamonds -= building.price.diamonds;
+        this.currencies.gems -= building.price.gems;
         this.sound.add('place').play({ volume: 0.3 });
-        this.selectedBuildingType = undefined;
+        // this.selectedBuildingType = undefined;
     }
 
     onPointerUp = (_e: Phaser.Input.Pointer) => {
