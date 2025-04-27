@@ -4,7 +4,6 @@ import { NotificationPopup } from '../NotificationPopup.ts';
 import { Currency, CurrencyAmount } from './types.ts';
 
 export abstract class Building extends GameObjects.Sprite {
-    public price: CurrencyAmount;
     private readonly cooldownMs: number;
     private readonly productionFinishedCallback: (amountGathered: Partial<CurrencyAmount>) => void;
     private readonly progressBar: ProgressBar;
@@ -22,7 +21,6 @@ export abstract class Building extends GameObjects.Sprite {
         amountToProduce: number,
         textureName: string,
         resourceToProduce: Currency,
-        price: CurrencyAmount = { gold: 0, diamonds: 0, gems: 0 },
         cooldownMs: number = 5000,
     ) {
         super(scene, x, y, textureName);
@@ -31,7 +29,6 @@ export abstract class Building extends GameObjects.Sprite {
         this.productionFinishedCallback = productionFinishedCallback;
         this.amountToProduce = amountToProduce;
         this.resourceToProduce = resourceToProduce;
-        this.price = price;
         this.cooldownMs = cooldownMs;
         this.notificationPopup = this.scene.add.existing(
             new NotificationPopup(this.scene, this.x, this.y, `+${this.amountToProduce} ${this.resourceToProduce}`),
@@ -78,9 +75,5 @@ export abstract class Building extends GameObjects.Sprite {
             this.elapsedTime = 0;
         }
         super.update(time, delta);
-    }
-
-    getPrice(): CurrencyAmount {
-        return this.price;
     }
 }

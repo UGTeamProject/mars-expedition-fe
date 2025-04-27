@@ -5,6 +5,11 @@ import { GemMine } from './GemMine.ts';
 import { DiamondMine } from './DiamondMine.ts';
 
 export type BuildingType = 'goldMine' | 'gemMine' | 'diamondMine';
+export const BUILDING_PRICES: Record<BuildingType, CurrencyAmount> = {
+    goldMine: { gold: 10, diamonds: 0, gems: 0 },
+    gemMine: { gold: 10, diamonds: 0, gems: 0 },
+    diamondMine: { gold: 10, diamonds: 0, gems: 0 },
+};
 
 export class BuildingFactory {
     private readonly scene: Phaser.Scene;

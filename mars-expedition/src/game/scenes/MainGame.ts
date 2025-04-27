@@ -1,8 +1,9 @@
-﻿import { DebugInfo } from '../objects/DebugInfo.ts';
-import { Marker } from '../objects/Marker.ts';
+﻿import { Marker } from '../objects/Marker.ts';
 import { Building } from '../objects/Building/Building.ts';
-import { BuildingFactory, BuildingType } from '../objects/Building/BuildingFactory.ts';
+import { BUILDING_PRICES, BuildingFactory, BuildingType } from '../objects/Building/BuildingFactory.ts';
 import { CurrencyAmount } from '../objects/Building/types.ts';
+import { CurrencyBar } from '../objects/CurrencyBar.ts';
+import { BuildingTypePicker } from '../objects/BuildingTypePicker.ts';
 import GameObject = Phaser.GameObjects.GameObject;
 
 const TILE_SIZE = 64;
@@ -12,13 +13,14 @@ export class MainGame extends Phaser.Scene {
     private map: Phaser.Tilemaps.Tilemap;
     private layers: Phaser.Tilemaps.TilemapLayer[] = [];
     private marker: Marker;
-    private debugInfo: DebugInfo;
     private buildings: Phaser.GameObjects.Group;
     private frameTime: number;
     private readonly buildingFactory: BuildingFactory;
-    private selectedBuildingType: BuildingType | undefined = 'goldMine';
+    private selectedBuildingType: BuildingType | undefined;
+    private currencyBar: CurrencyBar;
+    private buildingTypePicker: BuildingTypePicker;
     private currencies: CurrencyAmount = {
-        gold: 0,
+        gold: 100,
         diamonds: 0,
         gems: 0,
     };
@@ -36,6 +38,7 @@ export class MainGame extends Phaser.Scene {
         this.load.image('diamondMine', 'assets/diamondMine.png');
         this.load.image('goldMine', 'assets/goldMine.png');
         this.load.image('gemMine', 'assets/gemMine.png');
+        this.load.image('currencyBar', 'assets/currencyBar.png');
         this.load.tilemapTiledJSON('map', 'assets/tiles/map.json');
         this.load.image('gameBackground', 'assets/background.png');
         this.load.audio('ambient', 'assets/sound/ambient.mp3');
@@ -70,12 +73,22 @@ export class MainGame extends Phaser.Scene {
         this.input.on(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove);
         this.input.on(Phaser.Input.Events.POINTER_UP, this.onPointerUp);
 
-        this.debugInfo = this.add.existing(new DebugInfo(this, 10, 10));
+        this.currencyBar = this.add.existing(new CurrencyBar(this, centerX - 280, 0));
+        this.buildingTypePicker = this.add.existing(new BuildingTypePicker(this, centerX + 100, 1000));
         this.sound.add('ambient').play({ loop: true, volume: 0.3 });
     }
 
     addBuilding(x: number, y: number) {
         if (!this.selectedBuildingType) {
+            return;
+        }
+        const buildingPrice = BUILDING_PRICES[this.selectedBuildingType];
+        if (
+            this.currencies.gold < buildingPrice.gold ||
+            this.currencies.diamonds < buildingPrice.diamonds ||
+            this.currencies.gems < buildingPrice.gems
+        ) {
+            console.log('Not enough resources to build');
             return;
         }
         const building = this.buildingFactory.create(
@@ -92,9 +105,9 @@ export class MainGame extends Phaser.Scene {
         console.log(`Building created: ${this.selectedBuildingType}`);
 
         this.buildings.add(building, true);
-        this.currencies.gold -= building.price.gold;
-        this.currencies.diamonds -= building.price.diamonds;
-        this.currencies.gems -= building.price.gems;
+        this.currencies.gold -= buildingPrice.gold;
+        this.currencies.diamonds -= buildingPrice.diamonds;
+        this.currencies.gems -= buildingPrice.gems;
         this.sound.add('place').play({ volume: 0.3 });
         this.selectedBuildingType = undefined;
     }
@@ -146,7 +159,10 @@ export class MainGame extends Phaser.Scene {
         if (this.frameTime > this.UPDATE_DELTA) {
             this.frameTime = 0;
         }
-        this.debugInfo.updateInfo(JSON.stringify(this.currencies));
+        this.currencyBar.updateValues(this.currencies);
         this.buildings.getChildren().forEach((b: GameObject) => b.update(_time, delta));
+        this.marker.update(_time, delta);
+        this.buildingTypePicker.update(_time, delta);
+        this.selectedBuildingType = this.buildingTypePicker.getSelectedBuildingType();
     }
 }
