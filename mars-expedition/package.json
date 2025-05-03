@@ -28,11 +28,13 @@
         "test:ui": "node log.js test:ui & playwright test --ui"
     },
     "dependencies": {
+        "@react-keycloak/web": "^3.4.0",
         "@react-three/drei": "^9.120.5",
         "@react-three/fiber": "^8.17.10",
         "axios": "^1.7.9",
         "dotenv": "^16.4.7",
         "formik": "^2.4.6",
+        "keycloak-js": "^26.2.0",
         "phaser": "^3.86.0",
         "react": "^18.2.0",
         "react-bootstrap": "^2.10.5",

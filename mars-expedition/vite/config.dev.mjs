@@ -6,6 +6,6 @@ export default defineConfig({
     base: './',
     plugins: [react()],
     server: {
-        port: process.env.VITE_PORT || 8081,
+        port: process.env.VITE_PORT || 8082,
     },
 });
