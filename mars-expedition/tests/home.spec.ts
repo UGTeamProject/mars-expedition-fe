@@ -10,17 +10,17 @@ test('page loads', async ({ page }) => {
     expect(title).toBe('Mars Expedition');
 });
 
-test('sign up button works', async ({ page }) => {
+test('sign up button redirects to keycloak', async ({ page }) => {
     await page.getByTestId('signup-button').click();
-    expect(page.url()).toContain('/signup');
+    expect(page.url()).toContain('/realms/mars/protocol/openid-connect/auth');
 });
 
-test('login button works', async ({ page }) => {
+test('login button redirects to keycloak', async ({ page }) => {
     await page.getByTestId('login-button').click();
-    expect(page.url()).toContain('/login');
+    expect(page.url()).toContain('/realms/mars/protocol/openid-connect/auth');
 });
 
-test('start the journey button works', async ({ page }) => {
+test('start the journey button redirects to keycloak', async ({ page }) => {
     await page.getByTestId('start-journey-button').click();
-    expect(page.url()).toContain('/signup');
+    expect(page.url()).toContain('/realms/mars/protocol/openid-connect/auth');
 });

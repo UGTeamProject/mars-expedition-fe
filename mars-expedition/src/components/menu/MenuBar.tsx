@@ -6,7 +6,7 @@ function MenuBar() {
     return (
         <div className="menu">
             <a>
-                <img src="logo.png" />
+                <img src="logo.svg" />
             </a>
             <div className="options">
                 <NavLink to="/play" className={({ isActive }) => (isActive ? 'active' : '')}>

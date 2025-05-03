@@ -28,6 +28,10 @@
         "test:ui": "node log.js test:ui & playwright test --ui"
     },
     "dependencies": {
+        "@emotion/react": "^11.14.0",
+        "@emotion/styled": "^11.14.0",
+        "@mui/icons-material": "^7.0.2",
+        "@mui/material": "^7.0.2",
         "@react-keycloak/web": "^3.4.0",
         "@react-three/drei": "^9.120.5",
         "@react-three/fiber": "^8.17.10",

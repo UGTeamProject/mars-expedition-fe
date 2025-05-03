@@ -19,17 +19,27 @@ function Home() {
             </Canvas>
             <div className="home-menu">
                 {!keycloak.authenticated && (
-                        <div className="auth-btns">
-                            <button className="signup-btn" onClick={() => keycloak.register()} data-testid={'signup-button'}>
-                                Sign up
-                            </button>
-                            <button className="login-btn" onClick={() => keycloak.login({ redirectUri: 'http://localhost:8082/play'})} data-testid={'login-button'}>
-                                Log in
-                            </button>
+                    <div className="auth-btns">
+                        <button
+                            className="signup-btn"
+                            onClick={() => keycloak.register({ redirectUri: 'http://localhost:8082/play' })}
+                            data-testid={'signup-button'}
+                        >
+                            Sign up
+                        </button>
+                        <button
+                            className="login-btn"
+                            onClick={() => keycloak.login({ redirectUri: 'http://localhost:8082/play' })}
+                            data-testid={'login-button'}
+                        >
+                            Log in
+                        </button>
                     </div>
                 )}
                 {keycloak.authenticated && (
-                    <button className='login-btn' onClick={goToGameIfAuthenticated}>Back to the colony</button>
+                    <button className="login-btn" onClick={goToGameIfAuthenticated}>
+                        Back to the colony
+                    </button>
                 )}
             </div>
             <div className="content">
