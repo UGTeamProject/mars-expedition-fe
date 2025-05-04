@@ -1,22 +1,22 @@
 import { Boot } from './scenes/Boot';
-import { MainMenu } from './scenes/MainMenu';
-import { AUTO, Game } from 'phaser';
+import { Game } from 'phaser';
 import { Preloader } from './scenes/Preloader';
 import { MainGame } from './scenes/MainGame.ts';
 
-const config: Phaser.Types.Core.GameConfig = {
-    type: AUTO,
-    width: 1280,
-    height: 640,
-    parent: 'game-container',
-    scene: [Boot, Preloader, MainMenu, MainGame],
-    input: {
-        mouse: true,
-    },
-};
+const StartGame = () => {
+    const config: Phaser.Types.Core.GameConfig = {
+        type: Phaser.AUTO,
+        width: 1920,
+        height: 1080,
+        parent: 'game-container',
+        scale: {
+            mode: Phaser.Scale.FIT,
+            autoCenter: Phaser.Scale.CENTER_BOTH,
+        },
+        scene: [Boot, Preloader, MainGame],
+    };
 
-const StartGame = (parent: string) => {
-    return new Game({ ...config, parent });
+    return new Game(config);
 };
 
 export default StartGame;

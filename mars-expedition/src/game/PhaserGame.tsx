@@ -17,7 +17,7 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(function PhaserGame
 
     useLayoutEffect(() => {
         if (game.current === null) {
-            game.current = StartGame('game-container');
+            game.current = StartGame();
 
             if (typeof ref === 'function') {
                 ref({ game: game.current, scene: null });
@@ -29,9 +29,7 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(function PhaserGame
         return () => {
             if (game.current) {
                 game.current.destroy(true);
-                if (game.current !== null) {
-                    game.current = null;
-                }
+                game.current = null;
             }
         };
     }, [ref]);
