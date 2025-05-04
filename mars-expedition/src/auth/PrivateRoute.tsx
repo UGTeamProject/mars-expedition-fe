@@ -1,10 +1,16 @@
-import { Navigate, Outlet } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
+import { useKeycloak } from '@react-keycloak/web';
+import NotAuthorized from '../error-page/NotAuthorized';
+import { ReactNode } from 'react';
 
-const PrivateRoute = () => {
-    const [cookies] = useCookies(['authToken']);
+type PrivateRouteProps = {
+    children: ReactNode;
+};
 
-    return cookies.authToken ? <Outlet /> : <Navigate to="/not-authorized" />;
+const PrivateRoute = ({ children }: PrivateRouteProps) => {
+    const { keycloak } = useKeycloak();
+    const isLoggedIn = keycloak.authenticated;
+
+    return isLoggedIn ? children : <NotAuthorized />;
 };
 
 export default PrivateRoute;

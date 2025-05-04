@@ -5,9 +5,9 @@ import './menu.css';
 function MenuBar() {
     return (
         <div className="menu">
-            <NavLink to={'/'} className="logo">
-                <img src="logo.png" alt={'logo'} />
-            </NavLink>
+            <a>
+                <img src="logo.svg" />
+            </a>
             <div className="options">
                 <NavLink to="/play" className={({ isActive }) => (isActive ? 'active' : '')}>
                     Play

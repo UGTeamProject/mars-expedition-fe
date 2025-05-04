@@ -3,12 +3,13 @@ import './home.css';
 import '../styles.css';
 import { Canvas } from '@react-three/fiber';
 import { MarsModel } from '../components/mars/MarsModel';
+import { useKeycloak } from '@react-keycloak/web';
 
 function Home() {
+    const { keycloak } = useKeycloak();
     const navigate = useNavigate();
 
-    const goToSignUp = () => navigate('/signup');
-    const goToLogIn = () => navigate('/login');
+    const goToGameIfAuthenticated = () => navigate('/play');
 
     return (
         <div className="home-container">
@@ -17,14 +18,29 @@ function Home() {
                 <MarsModel />
             </Canvas>
             <div className="home-menu">
-                <div className="auth-btns">
-                    <button className="signup-btn" onClick={goToSignUp} data-testid={'signup-button'}>
-                        Sign up
+                {!keycloak.authenticated && (
+                    <div className="auth-btns">
+                        <button
+                            className="signup-btn"
+                            onClick={() => keycloak.register({ redirectUri: 'http://localhost:8082/play' })}
+                            data-testid={'signup-button'}
+                        >
+                            Sign up
+                        </button>
+                        <button
+                            className="login-btn"
+                            onClick={() => keycloak.login({ redirectUri: 'http://localhost:8082/play' })}
+                            data-testid={'login-button'}
+                        >
+                            Log in
+                        </button>
+                    </div>
+                )}
+                {keycloak.authenticated && (
+                    <button className="login-btn" onClick={goToGameIfAuthenticated}>
+                        Back to the colony
                     </button>
-                    <button className="login-btn" onClick={goToLogIn} data-testid={'login-button'}>
-                        Log in
-                    </button>
-                </div>
+                )}
             </div>
             <div className="content">
                 <h1>Mars Expedition</h1>
@@ -42,7 +58,7 @@ function Home() {
                     </p>
                     <p>The stars have been calling. Galaxy is open for you. Will you accept the mission?</p>
                 </div>
-                <button className="signup-btn" onClick={goToSignUp} data-testid={'start-journey-button'}>
+                <button className="signup-btn" onClick={() => keycloak.register()} data-testid={'start-journey-button'}>
                     Start the journey
                 </button>
             </div>

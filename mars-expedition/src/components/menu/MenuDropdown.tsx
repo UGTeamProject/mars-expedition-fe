@@ -1,28 +1,94 @@
-import { Dropdown, DropdownButton } from 'react-bootstrap';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../auth/useAuth';
+import { MouseEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useKeycloak } from '@react-keycloak/web';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutIcon from '@mui/icons-material/Logout';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import './menu.css';
+import ConfirmDialog from '../dialog/ConfirmDialog';
 
 function MenuDropdown() {
-    const { logout } = useAuth();
+    const { keycloak } = useKeycloak();
     const navigate = useNavigate();
-    const username = localStorage.getItem('username');
+    const username = keycloak.tokenParsed?.preferred_username;
+    const [open, setOpen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const isOpen = Boolean(anchorEl);
+
+    const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const handleLogout = () => {
-        logout();
-        navigate('/');
+        keycloak.logout({ redirectUri: 'http://localhost:8082/' });
     };
 
     return (
-        <DropdownButton id="menu-dropdown" size="lg" title={username || 'Guest'}>
-            <Dropdown.Item as={NavLink} to="/settings">
-                Settings
-            </Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item className="log-out-btn" onClick={handleLogout}>
-                Log out
-            </Dropdown.Item>
-        </DropdownButton>
+        <div>
+            <Button
+                id="menu-btn"
+                size="large"
+                aria-controls={isOpen ? 'menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={isOpen ? 'true' : undefined}
+                onClick={handleClick}
+            >
+                {username}
+                <ArrowDropDownIcon fontSize="large" color="inherit" />
+            </Button>
+            <Menu
+                id="menu"
+                anchorEl={anchorEl}
+                open={isOpen}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                }}
+                slotProps={{
+                    paper: {
+                        sx: {
+                            width: 210,
+                        },
+                    },
+                }}
+            >
+                <MenuItem onClick={() => navigate('/settings')}>
+                    <ListItemIcon>
+                        <SettingsIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText className="menu-text">Settings</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={() => setOpen(true)}>
+                    <ListItemIcon>
+                        <LogoutIcon fontSize="small" color="warning" />
+                    </ListItemIcon>
+                    <ListItemText color="warning">
+                        <b>Log out</b>
+                    </ListItemText>
+                </MenuItem>
+            </Menu>
+            <ConfirmDialog
+                title="Log out"
+                content="Are you sure you want to log out?"
+                open={open}
+                onClose={() => setOpen(false)}
+                onYes={handleLogout}
+            />
+        </div>
     );
 }
 
