@@ -21,14 +21,14 @@ function Home() {
                     <div className="auth-btns">
                         <button
                             className="signup-btn"
-                            onClick={() => keycloak.register({ redirectUri: 'http://localhost:8082/play' })}
+                            onClick={() => keycloak.register({ redirectUri: `${process.env.VITE_FRONTEND_URL}/play` })}
                             data-testid={'signup-button'}
                         >
                             Sign up
                         </button>
                         <button
                             className="login-btn"
-                            onClick={() => keycloak.login({ redirectUri: 'http://localhost:8082/play' })}
+                            onClick={() => keycloak.login({ redirectUri: `${process.env.VITE_FRONTEND_URL}/play` })}
                             data-testid={'login-button'}
                         >
                             Log in

@@ -28,7 +28,7 @@ function MenuDropdown() {
         setAnchorEl(null);
     };
 
-    const handleLogout = () => keycloak.logout({ redirectUri: 'http://localhost:8082/' });
+    const handleLogout = () => keycloak.logout({ redirectUri: `${process.env.VITE_FRONTEND_URL}/` });
 
     return (
         <div>
