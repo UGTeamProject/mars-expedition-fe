@@ -5,11 +5,11 @@ import './menu.css';
 function MenuBar() {
     return (
         <div className="menu">
-            <a>
-                <img src="logo.svg" />
-            </a>
+            <NavLink to="/" className="logo">
+                <img src="logo.svg" alt={'logo'} />
+            </NavLink>
             <div className="options">
-                <NavLink to="/play" className={({ isActive }) => (isActive ? 'active' : '')}>
+                <NavLink to="/play" className={({ isActive }) => (isActive ? 'active' : 'inactive')}>
                     Play
                 </NavLink>
                 <MenuDropdown />

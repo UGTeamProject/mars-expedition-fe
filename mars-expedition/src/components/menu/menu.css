@@ -9,51 +9,70 @@
     justify-content: space-between;
     align-items: center;
 
-    padding: 1rem 3rem 1rem 1rem;
+    padding: 1rem 3rem;
+    background: transparent;
 
     font-weight: bold;
 }
 
-/* Logo Image */
+/* Logo */
 .menu img {
     width: 200px;
     height: 100px;
+    object-fit: contain;
 }
 
-/* Options */
+/* Navigation Options */
 .options {
     display: flex;
     align-items: center;
-    gap: 3rem;
+    gap: 2.5rem;
 }
 
-.options > a {
-    cursor: pointer;
-    text-decoration: none;
-    color: white;
-    font-size: 2rem;
-    padding-right: 3rem;
-}
-
+.options a,
 a {
-    cursor: pointer;
-    text-decoration: none;
-    color: white;
     font-size: 2rem;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+    color: #dcdcdc;
+}
+
+a.inactive {
+    font-weight: normal;
 }
 
 a.active {
-    font-size: 2rem;
+    font-weight: bold;
     color: #a7a7a7;
 }
 
+/* Menu Button */
 #menu-btn {
     background-color: transparent;
     border: 2px solid white;
-    border-radius: 15px;
+    border-radius: 12px;
+
     color: white;
     font-weight: bold;
     text-transform: lowercase;
-    padding: 1rem 3rem;
     font-size: 1.5rem;
+
+    padding: 0.75rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    transition:
+        background-color 0.2s,
+        border-color 0.2s;
+}
+
+#menu-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #ddd;
 }

@@ -9,8 +9,8 @@ import ListItemText from '@mui/material/ListItemText';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import './menu.css';
 import ConfirmDialog from '../dialog/ConfirmDialog';
+import './menu.css';
 
 function MenuDropdown() {
     const { keycloak } = useKeycloak();
@@ -28,9 +28,7 @@ function MenuDropdown() {
         setAnchorEl(null);
     };
 
-    const handleLogout = () => {
-        keycloak.logout({ redirectUri: 'http://localhost:8082/' });
-    };
+    const handleLogout = () => keycloak.logout({ redirectUri: 'http://localhost:8082/' });
 
     return (
         <div>
