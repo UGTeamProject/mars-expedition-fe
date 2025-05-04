@@ -1,6 +1,6 @@
 ﻿import { GameObjects } from 'phaser';
 
-export class progressBar extends GameObjects.Line {
+export class ProgressBar extends GameObjects.Line {
     private progress: number;
     private elapsedTime: number;
     private initialX: number;
