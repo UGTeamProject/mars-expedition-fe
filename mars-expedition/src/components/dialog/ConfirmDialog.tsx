@@ -45,10 +45,10 @@ function ConfirmDialog({ title, content, open, onClose, onYes }: ConfirmDialogPr
                 {typeof content === 'string' ? <Typography>{content}</Typography> : content}
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose} color="inherit" sx={{ color: 'white' }}>
+                <Button onClick={onClose} color="inherit" sx={{ color: 'white' }} data-testid={'cancel-button'}>
                     No
                 </Button>
-                <Button onClick={onYes} color="primary" variant="contained">
+                <Button onClick={onYes} color="primary" variant="contained" data-testid={'confirm-button'}>
                     Yes
                 </Button>
             </DialogActions>

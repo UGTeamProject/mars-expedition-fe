@@ -36,7 +36,7 @@ function Home() {
                     </div>
                 )}
                 {keycloak.authenticated && (
-                    <button className="login-btn" onClick={goToGameIfAuthenticated}>
+                    <button className="login-btn" onClick={goToGameIfAuthenticated} data-testid={'back-button'}>
                         Back to the colony
                     </button>
                 )}
@@ -67,7 +67,7 @@ function Home() {
                     </button>
                 )}
                 {keycloak.authenticated && (
-                    <button className="signup-btn" onClick={goToGameIfAuthenticated}>
+                    <button className="signup-btn" onClick={goToGameIfAuthenticated} data-testid={'back-button'}>
                         Back to the colony
                     </button>
                 )}

@@ -5,7 +5,7 @@ import './menu.css';
 function MenuBar() {
     return (
         <div className="menu">
-            <NavLink to="/" className="logo">
+            <NavLink to="/" className="logo" data-testid={'home-button'}>
                 <img src="logo.svg" alt={'logo'} />
             </NavLink>
             <div className="options">

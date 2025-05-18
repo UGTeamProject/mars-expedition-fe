@@ -10,7 +10,6 @@ jobs:
   e2e-test:
     runs-on: ubuntu-latest
 
-
     services:
       db:
         image: postgres:latest
@@ -25,6 +24,21 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+      keycloak:
+        image: quay.io/keycloak/keycloak:24.0.1
+        ports:
+          - 8080:8080
+        env:
+          KEYCLOAK_ADMIN: admin
+          KEYCLOAK_ADMIN_PASSWORD: admin
+        options: >-
+          --health-cmd="curl -f http://localhost:8080/health/ready || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+        volumes:
+          - ./mars-realm.json:/opt/keycloak/data/import/mars-realm.json
+        command: start-dev --import-realm
 
     defaults:
       run:
@@ -35,10 +49,11 @@ jobs:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       DB_PORT: 5432
-      BACKEND_PORT: 8080
-      BACKEND_URL: http://localhost:8080
-      VITE_USERNAME: test
-      VITE_PASSWORD: Rolad12!
+      BACKEND_PORT: 8081
+      BACKEND_URL: http://localhost:8081
+      KEYCLOAK_URL: http://localhost:8080
+      VITE_USERNAME: testuser
+      VITE_PASSWORD: Password123!
       SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/db
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin
@@ -69,6 +84,21 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Wait for Keycloak
+        run: |
+          echo "Waiting for Keycloak"
+          for i in {1..60}; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/realms/mars || echo "000")
+            if [ "$status" = "200" ]; then
+              echo "Keycloak is up! (HTTP $status)"
+              exit 0
+            fi
+            echo "Waiting... ($i) - HTTP $status"
+            sleep 2
+          done
+          echo "Keycloak did not start in time."
+          exit 1
+
       - name: Start Backend in Background
         run: |
           ./gradlew bootRun &
@@ -79,7 +109,7 @@ jobs:
         run: |
           echo "Waiting for backend"
           for i in {1..60}; do
-            status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/api || echo "000")
+            status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8081/api || echo "000")
             if [ "$status" = "200" ] || [ "$status" = "403" ]; then
               echo "Backend is up! (HTTP $status)"
               exit 0
@@ -89,12 +119,6 @@ jobs:
           done
           echo "Backend did not start in time."
           exit 1
-
-      - name: Create Test User via API
-        run: |
-          curl -X POST http://localhost:8080/api/player \
-            -H "Content-Type: application/json" \
-            -d '{"username":"test","email":"test@gmail.com","password":"Rolad12!"}'
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
