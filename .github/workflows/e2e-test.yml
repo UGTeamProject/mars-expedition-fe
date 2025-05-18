@@ -35,8 +35,8 @@ jobs:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       DB_PORT: 5432
-      BACKEND_PORT: 8080
-      BACKEND_URL: http://localhost:8080
+      BACKEND_PORT: 8081
+      BACKEND_URL: http://localhost:8081
       VITE_USERNAME: test
       VITE_PASSWORD: Rolad12!
       SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/db
@@ -79,7 +79,7 @@ jobs:
         run: |
           echo "Waiting for backend"
           for i in {1..60}; do
-            status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/api || echo "000")
+            status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8081/api || echo "000")
             if [ "$status" = "200" ] || [ "$status" = "403" ]; then
               echo "Backend is up! (HTTP $status)"
               exit 0
@@ -89,12 +89,6 @@ jobs:
           done
           echo "Backend did not start in time."
           exit 1
-
-      - name: Create Test User via API
-        run: |
-          curl -X POST http://localhost:8080/api/player \
-            -H "Content-Type: application/json" \
-            -d '{"username":"test","email":"test@gmail.com","password":"Rolad12!"}'
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
