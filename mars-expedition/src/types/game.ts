@@ -13,6 +13,12 @@ export interface GameData {
     timeSpent: number;
 }
 
+export interface GameDataResponse {
+    gameState: string;
+    id: number;
+    userId: string;
+}
+
 export interface WindowExtensions {
     keycloak?: {
         token?: string;

@@ -13,7 +13,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import ConfirmDialog from '../components/dialog/ConfirmDialog';
 import { api } from '../services/api';
 import { gameStorage } from '../services/gameStorage';
-import { GameData } from '../types/game';
+import { GameData, GameDataResponse } from '../types/game';
 import './settings.css';
 
 function Settings() {
@@ -45,10 +45,9 @@ function Settings() {
             try {
                 const gameData: GameData = JSON.parse(e.target?.result as string);
                 gameStorage.save(gameData);
-                console.log('Loaded game data from file:', gameData);
                 show('Game loaded successfully from file. Restart the game to apply changes.', 'success');
             } catch (error) {
-                console.log('Failed to load game from file:', error);
+                console.error('Failed to load game from file:', error);
                 show('Failed to load game from file. Invalid JSON format.', 'error');
             }
         };
@@ -61,12 +60,12 @@ function Settings() {
     const handleLoadFromBackend = async () => {
         setLoadingFromBackend(true);
         try {
-            const response = await api.get<GameData>('/game-session/state', {
+            const response = await api.get<GameDataResponse>('/game-session/state', {
                 headers: {
                     Authorization: `Bearer ${keycloak.token}`,
                 },
             });
-            gameStorage.save(response.data);
+            gameStorage.save(JSON.parse(response.data.gameState) as GameData);
             show('Game loaded successfully from backend. Restart the game to apply changes.', 'success');
         } catch (error) {
             show('Failed to load game from backend', 'error');

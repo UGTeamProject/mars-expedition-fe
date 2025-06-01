@@ -191,7 +191,16 @@ export class MainGame extends Phaser.Scene {
             // Also save to backend if authenticated
             const keycloak = window.keycloak;
             if (keycloak?.token) {
-                await api.post('/game-session/update', gameData, {
+                await api.post(
+                    '/game-session',
+                    {},
+                    {
+                        headers: {
+                            Authorization: `Bearer ${keycloak.token}`,
+                        },
+                    },
+                );
+                await api.put('/game-session/update', gameData, {
                     headers: {
                         Authorization: `Bearer ${keycloak.token}`,
                     },
@@ -224,7 +233,6 @@ export class MainGame extends Phaser.Scene {
     public loadGameData(gameData: GameData): void {
         // Clear existing buildings
         this.buildings.clear(true, true);
-        console.log('Loading game data:', gameData);
         // Load currencies
         this.currencies = { ...gameData.currencies };
 
@@ -264,7 +272,6 @@ export class MainGame extends Phaser.Scene {
     private loadSavedGameData(): void {
         const savedData = gameStorage.load();
         if (savedData) {
-            console.log('Loading saved game data:', savedData);
             this.loadGameData(savedData);
         }
     }
