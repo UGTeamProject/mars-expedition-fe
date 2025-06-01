@@ -64,13 +64,13 @@ function MenuDropdown() {
                     },
                 }}
             >
-                <MenuItem onClick={() => navigate('/settings')}>
+                <MenuItem onClick={() => navigate('/settings')} data-testid={'settings-button'}>
                     <ListItemIcon>
                         <SettingsIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText className="menu-text">Settings</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={() => setOpen(true)}>
+                <MenuItem onClick={() => setOpen(true)} data-testid={'logout-button'}>
                     <ListItemIcon>
                         <LogoutIcon fontSize="small" color="warning" />
                     </ListItemIcon>
@@ -85,6 +85,7 @@ function MenuDropdown() {
                 open={open}
                 onClose={() => setOpen(false)}
                 onYes={handleLogout}
+                data-testid={'logout-dialog'}
             />
         </div>
     );

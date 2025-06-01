@@ -41,6 +41,7 @@ function Settings() {
                     </p>
                     <Button
                         id="settings-btn"
+                        data-testid={'manage-account-button'}
                         variant="contained"
                         color="primary"
                         startIcon={<ManageAccountsIcon />}
@@ -57,6 +58,7 @@ function Settings() {
                     <p>Reset your game progress to start from the beginning.</p>
                     <Button
                         id="settings-btn"
+                        data-testid={'reset-button'}
                         variant="contained"
                         color="warning"
                         startIcon={<DeleteIcon />}
@@ -70,6 +72,7 @@ function Settings() {
                         open={open}
                         onClose={() => setOpen(false)}
                         onYes={handleGameReset}
+                        data-testid={'reset-dialog'}
                     />
                 </div>
             </div>
