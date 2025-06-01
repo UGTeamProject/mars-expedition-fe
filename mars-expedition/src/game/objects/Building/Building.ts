@@ -12,6 +12,7 @@ export abstract class Building extends GameObjects.Sprite {
     private readonly resourceToProduce: Currency;
     private elapsedTime: number = 0;
     private isProductionFinished: boolean = false;
+    private level: number = 1;
 
     protected constructor(
         scene: Phaser.Scene,
@@ -75,5 +76,23 @@ export abstract class Building extends GameObjects.Sprite {
             this.elapsedTime = 0;
         }
         super.update(time, delta);
+    }
+
+    public abstract getBuildingType(): string;
+
+    public getLevel(): number {
+        return this.level;
+    }
+
+    public setLevel(level: number): void {
+        this.level = level;
+    }
+
+    public getProductionProgress(): number {
+        return (this.elapsedTime / this.cooldownMs) * 100;
+    }
+
+    public setProductionProgress(progress: number): void {
+        this.elapsedTime = (progress / 100) * this.cooldownMs;
     }
 }
