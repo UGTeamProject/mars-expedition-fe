@@ -16,7 +16,7 @@ function Settings() {
 
     const handleGameReset = async () => {
         try {
-            await axios.delete(`${process.env.VITE_BACKEND_URL}/api/game-session/delete`, {
+            await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/game-session/delete`, {
                 headers: {
                     Authorization: `Bearer ${keycloak.token}`,
                 },
@@ -46,7 +46,7 @@ function Settings() {
                         color="primary"
                         startIcon={<ManageAccountsIcon />}
                         component="a"
-                        href={`${process.env.VITE_KEYCLOAK_URL}/realms/mars/account`}
+                        href={`${import.meta.env.VITE_KEYCLOAK_URL}/realms/mars/account`}
                         target="_blank"
                         rel="noopener noreferrer"
                     >
