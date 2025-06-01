@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import { gameStorage } from '../../services/gameStorage.ts';
 
 export class Preloader extends Scene {
     constructor() {
@@ -21,6 +22,15 @@ export class Preloader extends Scene {
     }
 
     create() {
-        this.scene.start('MainGame');
+        // Check if this is a new player (no saved data)
+        const savedData = gameStorage.load();
+
+        if (!savedData) {
+            // New player - show intro scene
+            this.scene.start('IntroScene');
+        } else {
+            // Returning player - go directly to main game
+            this.scene.start('MainGame');
+        }
     }
 }

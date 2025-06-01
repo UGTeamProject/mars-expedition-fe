@@ -2,6 +2,7 @@ import { Boot } from './scenes/Boot';
 import { Game } from 'phaser';
 import { Preloader } from './scenes/Preloader';
 import { MainGame } from './scenes/MainGame.ts';
+import { IntroScene } from './scenes/IntroScene.ts';
 
 const StartGame = () => {
     const config: Phaser.Types.Core.GameConfig = {
@@ -13,7 +14,7 @@ const StartGame = () => {
             mode: Phaser.Scale.FIT,
             autoCenter: Phaser.Scale.CENTER_BOTH,
         },
-        scene: [Boot, Preloader, MainGame],
+        scene: [Boot, Preloader, IntroScene, MainGame],
     };
 
     return new Game(config);

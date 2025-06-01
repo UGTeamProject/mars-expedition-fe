@@ -6,9 +6,9 @@ import { DiamondMine } from './DiamondMine.ts';
 
 export type BuildingType = 'goldMine' | 'gemMine' | 'diamondMine';
 export const BUILDING_PRICES: Record<BuildingType, CurrencyAmount> = {
-    goldMine: { gold: 10, diamonds: 0, gems: 0 },
-    gemMine: { gold: 10, diamonds: 0, gems: 0 },
-    diamondMine: { gold: 10, diamonds: 0, gems: 0 },
+    goldMine: { gold: 100, diamonds: 0, gems: 0 },
+    gemMine: { gold: 0, diamonds: 100, gems: 0 },
+    diamondMine: { gold: 200, diamonds: 0, gems: 0 },
 };
 
 export class BuildingFactory {
