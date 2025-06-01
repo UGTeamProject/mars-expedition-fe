@@ -19,6 +19,9 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(function PhaserGame
         if (game.current === null) {
             game.current = StartGame();
 
+            // Make the game instance globally accessible
+            window.game = game.current;
+
             if (typeof ref === 'function') {
                 ref({ game: game.current, scene: null });
             } else if (ref) {

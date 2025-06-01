@@ -15,4 +15,8 @@ export class GemMine extends Building {
     update(time: number, delta: number) {
         super.update(time, delta);
     }
+
+    public getBuildingType(): string {
+        return 'gemMine';
+    }
 }

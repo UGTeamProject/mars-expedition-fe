@@ -15,4 +15,8 @@ export class GoldMine extends Building {
     update(time: number, delta: number) {
         super.update(time, delta);
     }
+
+    public getBuildingType(): string {
+        return 'goldMine';
+    }
 }

@@ -1,10 +1,13 @@
 import { GameObjects } from 'phaser';
-import { BuildingType } from './Building/BuildingFactory.ts';
+import { BuildingType, BUILDING_PRICES } from './Building/BuildingFactory.ts';
 
 export class BuildingTypePicker extends GameObjects.Rectangle {
     private goldMine: Phaser.GameObjects.Sprite;
     private diamondMine: Phaser.GameObjects.Sprite;
     private gemMine: Phaser.GameObjects.Sprite;
+    private goldMineText: Phaser.GameObjects.Text;
+    private diamondMineText: Phaser.GameObjects.Text;
+    private gemMineText: Phaser.GameObjects.Text;
     private selectedBuildingType: BuildingType | undefined;
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
@@ -39,6 +42,39 @@ export class BuildingTypePicker extends GameObjects.Rectangle {
                     ? (this.selectedBuildingType = undefined)
                     : (this.selectedBuildingType = 'gemMine');
             });
+
+        // Add price text under each building button
+        const goldPrice = BUILDING_PRICES.goldMine;
+        const diamondPrice = BUILDING_PRICES.diamondMine;
+        const gemPrice = BUILDING_PRICES.gemMine;
+
+        this.goldMineText = scene.add
+            .text(x, y + 50, `${goldPrice.gold}G`, {
+                fontSize: '14px',
+                color: '#ffffff',
+            })
+            .setScrollFactor(0)
+            .setDepth(1)
+            .setOrigin(0.5);
+
+        this.diamondMineText = scene.add
+            .text(x + 100, y + 50, `${diamondPrice.gold}G`, {
+                fontSize: '14px',
+                color: '#ffffff',
+            })
+            .setScrollFactor(0)
+            .setDepth(1)
+            .setOrigin(0.5);
+
+        this.gemMineText = scene.add
+            .text(x + 200, y + 50, `${gemPrice.gold}G`, {
+                fontSize: '14px',
+                color: '#ffffff',
+            })
+            .setScrollFactor(0)
+            .setDepth(1)
+            .setOrigin(0.5);
+
         this.setScrollFactor(0);
     }
 

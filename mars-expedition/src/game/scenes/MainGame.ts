@@ -4,6 +4,9 @@ import { BUILDING_PRICES, BuildingFactory, BuildingType } from '../objects/Build
 import { CurrencyAmount } from '../objects/Building/types.ts';
 import { CurrencyBar } from '../objects/CurrencyBar.ts';
 import { BuildingTypePicker } from '../objects/BuildingTypePicker.ts';
+import { api } from '../../services/api.ts';
+import { gameStorage } from '../../services/gameStorage.ts';
+import { GameData } from '../../types/game.ts';
 import GameObject = Phaser.GameObjects.GameObject;
 
 const TILE_SIZE = 64;
@@ -24,6 +27,9 @@ export class MainGame extends Phaser.Scene {
         diamonds: 0,
         gems: 0,
     };
+    private gameStartTime: number = Date.now();
+    private lastSaveTime: number = Date.now();
+    private readonly SAVE_INTERVAL = 60000; // 1 minute in milliseconds
 
     constructor() {
         super('MainGame');
@@ -76,6 +82,9 @@ export class MainGame extends Phaser.Scene {
         this.currencyBar = this.add.existing(new CurrencyBar(this, centerX - 280, 0));
         this.buildingTypePicker = this.add.existing(new BuildingTypePicker(this, centerX + 100, 1000));
         this.sound.add('ambient').play({ loop: true, volume: 0.3 });
+
+        // Load saved game data on startup
+        this.loadSavedGameData();
     }
 
     addBuilding(x: number, y: number) {
@@ -102,7 +111,6 @@ export class MainGame extends Phaser.Scene {
                 this.sound.add('coin').play({ volume: 0.3 });
             },
         );
-        console.log(`Building created: ${this.selectedBuildingType}`);
 
         this.buildings.add(building, true);
         this.currencies.gold -= buildingPrice.gold;
@@ -164,5 +172,107 @@ export class MainGame extends Phaser.Scene {
         this.marker.update(_time, delta);
         this.buildingTypePicker.update(_time, delta);
         this.selectedBuildingType = this.buildingTypePicker.getSelectedBuildingType();
+
+        // Auto-save every minute
+        const currentTime = Date.now();
+        if (currentTime - this.lastSaveTime >= this.SAVE_INTERVAL) {
+            this.saveGameData();
+            this.lastSaveTime = currentTime;
+        }
+    }
+
+    private async saveGameData(): Promise<void> {
+        try {
+            const gameData = this.serializeGameData();
+
+            // Save to localStorage
+            gameStorage.save(gameData);
+
+            // Also save to backend if authenticated
+            const keycloak = window.keycloak;
+            if (keycloak?.token) {
+                await api.post(
+                    '/game-session',
+                    {},
+                    {
+                        headers: {
+                            Authorization: `Bearer ${keycloak.token}`,
+                        },
+                    },
+                );
+                await api.put('/game-session/update', gameData, {
+                    headers: {
+                        Authorization: `Bearer ${keycloak.token}`,
+                    },
+                });
+            }
+        } catch (error) {
+            console.error('Error saving game data:', error);
+        }
+    }
+
+    private serializeGameData(): GameData {
+        const buildingsData = this.buildings.getChildren().map((gameObject: GameObject) => {
+            const building = gameObject as Building;
+            return {
+                type: building.getBuildingType(),
+                x: building.x,
+                y: building.y,
+                level: building.getLevel(),
+                productionProgress: building.getProductionProgress(),
+            } as GameData['buildings'][number];
+        });
+
+        return {
+            currencies: { ...this.currencies },
+            buildings: buildingsData,
+            timeSpent: Date.now() - this.gameStartTime,
+        };
+    }
+
+    public loadGameData(gameData: GameData): void {
+        // Clear existing buildings
+        this.buildings.clear(true, true);
+        // Load currencies
+        this.currencies = { ...gameData.currencies };
+
+        // Load buildings
+        gameData.buildings.forEach(buildingData => {
+            const building = this.buildingFactory.create(
+                buildingData.type,
+                buildingData.x,
+                buildingData.y,
+                (amountGathered: Partial<CurrencyAmount>) => {
+                    this.currencies.gold += amountGathered.gold || 0;
+                    this.currencies.diamonds += amountGathered.diamonds || 0;
+                    this.currencies.gems += amountGathered.gems || 0;
+                    this.sound.add('coin').play({ volume: 0.3 });
+                },
+            );
+
+            // Set building level and progress if available
+            if (buildingData.level && building.setLevel) {
+                building.setLevel(buildingData.level);
+            }
+            if (buildingData.productionProgress && building.setProductionProgress) {
+                building.setProductionProgress(buildingData.productionProgress);
+            }
+
+            this.buildings.add(building, true);
+        });
+
+        // Update game start time based on time spent
+        this.gameStartTime = Date.now() - gameData.timeSpent;
+    }
+
+    public getGameData(): GameData {
+        return this.serializeGameData();
+    }
+
+    private loadSavedGameData(): void {
+        const savedData = gameStorage.load();
+        if (savedData) {
+            this.loadGameData(savedData);
+        }
     }
 }
