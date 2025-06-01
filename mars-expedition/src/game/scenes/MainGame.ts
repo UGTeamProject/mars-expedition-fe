@@ -29,7 +29,7 @@ export class MainGame extends Phaser.Scene {
     };
     private gameStartTime: number = Date.now();
     private lastSaveTime: number = Date.now();
-    private readonly SAVE_INTERVAL = 60000; // 1 minute in milliseconds
+    private readonly SAVE_INTERVAL = 15000; // 15 seconds in milliseconds
 
     constructor() {
         super('MainGame');
@@ -83,6 +83,9 @@ export class MainGame extends Phaser.Scene {
         this.buildingTypePicker = this.add.existing(new BuildingTypePicker(this, centerX + 100, 1000));
         this.sound.add('ambient').play({ loop: true, volume: 0.3 });
 
+        // Add focus/blur event listeners to prevent sound stacking
+        this.setupFocusHandlers();
+
         // Load saved game data on startup
         this.loadSavedGameData();
     }
@@ -108,7 +111,7 @@ export class MainGame extends Phaser.Scene {
                 this.currencies.gold += amountGathered.gold || 0;
                 this.currencies.diamonds += amountGathered.diamonds || 0;
                 this.currencies.gems += amountGathered.gems || 0;
-                this.sound.add('coin').play({ volume: 0.3 });
+                this.playCoinSound();
             },
         );
 
@@ -246,7 +249,7 @@ export class MainGame extends Phaser.Scene {
                     this.currencies.gold += amountGathered.gold || 0;
                     this.currencies.diamonds += amountGathered.diamonds || 0;
                     this.currencies.gems += amountGathered.gems || 0;
-                    this.sound.add('coin').play({ volume: 0.3 });
+                    this.playCoinSound();
                 },
             );
 
@@ -273,6 +276,27 @@ export class MainGame extends Phaser.Scene {
         const savedData = gameStorage.load();
         if (savedData) {
             this.loadGameData(savedData);
+        }
+    }
+
+    private setupFocusHandlers(): void {
+        window.addEventListener('blur', () => {
+            // Stop all sounds when window loses focus
+            this.sound.stopAll();
+        });
+
+        window.addEventListener('focus', () => {
+            // Restart ambient sound when window gains focus
+            if (!this.sound.get('ambient')) {
+                this.sound.add('ambient').play({ loop: true, volume: 0.3 });
+            }
+        });
+    }
+
+    private playCoinSound(): void {
+        // Only play coin sound if window has focus
+        if (document.hasFocus()) {
+            this.sound.add('coin').play({ volume: 0.3 });
         }
     }
 }

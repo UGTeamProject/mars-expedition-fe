@@ -67,7 +67,7 @@ export class BuildingTypePicker extends GameObjects.Rectangle {
             .setOrigin(0.5);
 
         this.gemMineText = scene.add
-            .text(x + 200, y + 50, `${gemPrice.gold}G`, {
+            .text(x + 200, y + 50, `${gemPrice.diamonds}D`, {
                 fontSize: '14px',
                 color: '#ffffff',
             })
