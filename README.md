@@ -13,7 +13,7 @@ Do uruchomienia programu potrzebne są:
 
 ### Pliki środowiskowe
 
-Po pierwsze, należy stworzyć pliki **.env** w obu folderach (`./mars-expedition-fe/mars-expedition` i `./mars-expedition-be`) i stworzyć wymagane zmienne środowiskowe. Zmienne wraz z przykładowymi wartościami są utworzone w plikach `.env-example` we wcześniej wymienionych folderach. Można skopiować ich zawartość do pliku **.env** lub usunąć **-example** z nazwy pliku.
+Po pierwsze, należy stworzyć pliki **.env** w obu folderach (`./mars-expedition-fe/mars-expedition` i `./mars-expedition-be`) i stworzyć wymagane zmienne środowiskowe. Zmienne wraz z przykładowymi wartościami są utworzone w plikach `.env-example` we wcześniej wymienionych folderach. Można skopiować ich zawartość do pliku **.env** lub usunąć **-example** z nazwy pliku. Zaleca się pozostawienie domyślnych ustawień.
 
 ### Uruchomienie
 
@@ -32,6 +32,6 @@ cd ../mars-expedition-fe
 docker compose up    // z flagą -d aby ukryć logi
 ```
 
-Aplikacja będzie dostępna na http://localhost:8082 (lub innym wskazanym w pliku środowiskowym porcie). Backend domyślnie działa na porcie 8081, a serwer autoryzacyjny Keycloak na 8080.
+Aplikacja będzie dostępna na http://localhost:8082. Backend domyślnie działa na porcie 8081, a serwer autoryzacyjny Keycloak na 8080.
 
 ##### Natalia Niewiadowska (288503), Michał Pomirski (293676), Kacper Prarat (285800)
